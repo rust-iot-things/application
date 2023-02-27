@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Items from "./Items";
+import { useState, useEffect } from "react";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -36,6 +37,7 @@ export default function ThingCard(
   thing: Items,
   h: [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
 ) {
+  // const [clicked, setClicked] = useState<boolean>(); << this is not allowed.. will crahs if checkd in
   if (h === undefined) {
     return <div></div>;
   }
