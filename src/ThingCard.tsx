@@ -29,29 +29,24 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-type RevisedHook = NonNullable<
-  [boolean, React.Dispatch<React.SetStateAction<boolean>>]
->;
+interface IThingCard {
+  thing: Items
+}
 
-export default function ThingCard(
-  thing: Items,
-  h: [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
-) {
-  // const [clicked, setClicked] = useState<boolean>(); << this is not allowed.. will crahs if checkd in
-  if (h === undefined) {
-    return <div></div>;
+export default function ThingCard(props: IThingCard) {
+  const [clicked, setClicked] = useState<boolean>(false);
+
+  const handleOnClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+    setClicked(!clicked);
   }
-  let hook: RevisedHook = h;
-  const handleExpandClick = () => {
-    hook?.[1](!hook?.[0]);
-  };
 
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275, padding: 1 }}>
       <CardHeader
         avatar={<Avatar aria-label="thing">{"ESP"}</Avatar>}
-        title={thing.name}
-        subheader={thing.id}
+        title={props.thing.name}
+        subheader={props.thing.id}
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -64,14 +59,14 @@ export default function ThingCard(
       </CardContent>
       <CardActions disableSpacing></CardActions>
       <ExpandMore
-        expand={hook?.[0]}
-        onClick={handleExpandClick}
-        aria-expanded={hook?.[0]}
+        expand={clicked}
+        onClick={(event) => handleOnClick(event)}
+        aria-expanded={clicked}
         aria-label="show more"
       >
         <ExpandMoreIcon />
       </ExpandMore>
-      <Collapse in={hook?.[0]} timeout="auto" unmountOnExit>
+      <Collapse in={clicked} timeout="auto" unmountOnExit>
         <CardContent>
           <Typography paragraph>TBD: Temperature/Humidity Graph</Typography>
         </CardContent>

@@ -23,17 +23,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [loadingDevices, setLoadingDevices] = useState(false);
 
-  // This is hacky/sucks...
-  // Can I use Redux here? Currently, only 50 devices are allowed,
-  // as the hooks can not be added/removed dynamically
-  let collapseHooks: Array<
-    [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-  > = [];
-
-  for (let i = 0; i < 50; i++) {
-    collapseHooks.push(useState(false));
-  }
-
   async function request() {
     try {
       setLoading(true);
@@ -90,8 +79,8 @@ function App() {
           <Grid container spacing={2}>
             {" "}
             {response?.Items.map((thing, index) => (
-              <Grid key={thing.id} item xs={100}>
-                {ThingCard(thing, collapseHooks.at(index))}
+              <Grid key={index} id={thing.id} item xs={100}>
+                <ThingCard thing={thing} />
               </Grid>
             ))}
           </Grid>
