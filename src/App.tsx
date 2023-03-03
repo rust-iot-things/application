@@ -75,7 +75,7 @@ function App() {
             {" "}
             {response?.Items.map((thing, index) => (
               <Grid key={index} id={thing.id} item xs={100}>
-                <ThingCard thing={thing} />
+                <ThingCard thing={thing} url={url} />
               </Grid>
             ))}
           </Grid>

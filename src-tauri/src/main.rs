@@ -3,7 +3,10 @@
 //     windows_subsystem = "windows"
 // )]
 
-use btleplug::api::{Central, Manager as _, Peripheral, PeripheralProperties, ScanFilter};
+pub mod humidities;
+pub mod temperatures;
+
+use btleplug::api::{Central, Manager as _, Peripheral, ScanFilter};
 use btleplug::platform::Manager;
 use serde::{Deserialize, Serialize};
 use std::thread;
@@ -69,7 +72,12 @@ async fn request(url: &str) -> Result<Things, String> {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![discover_devices, request])
+        .invoke_handler(tauri::generate_handler![
+            discover_devices,
+            request,
+            temperatures::request_temperature,
+            humidities::request_humidity
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

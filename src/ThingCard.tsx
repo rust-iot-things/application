@@ -13,6 +13,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Items from "./Items";
 import { useState, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -30,16 +31,35 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 interface IThingCard {
-  thing: Items
+  thing: Items;
+  url: string;
 }
 
 export default function ThingCard(props: IThingCard) {
   const [clicked, setClicked] = useState<boolean>(false);
-
-  const handleOnClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const [temperature, setTemperature] = useState<number>(0.0);
+  const [humidity, setHumidity] = useState<number>(0.0);
+  const handleOnClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     event.preventDefault();
     setClicked(!clicked);
+  };
+
+  async function getTemperature() {
+    let url: string = props.url + "/" + props.thing.id + "/Temperatures";
+    setTemperature(await invoke("request_temperature", { url }));
   }
+
+  async function getHumiditiy() {
+    let url: string = props.url + "/" + props.thing.id + "/Humidities";
+    setHumidity(await invoke("request_humidity", { url }));
+  }
+
+  useEffect(() => {
+    getTemperature();
+    getHumiditiy();
+  }, []);
 
   return (
     <Card sx={{ minWidth: 275, padding: 1 }}>
@@ -54,8 +74,8 @@ export default function ThingCard(props: IThingCard) {
         }
       ></CardHeader>
       <CardContent>
-        <Typography component="div">Temperature: 22.2°C</Typography>
-        <Typography component="div">Humidity: 50%</Typography>
+        <Typography component="div">Temperature: {temperature}°C</Typography>
+        <Typography component="div">Humidity: {humidity}%</Typography>
       </CardContent>
       <CardActions disableSpacing></CardActions>
       <ExpandMore
