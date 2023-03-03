@@ -16,9 +16,8 @@ function App() {
   const [response, setResponse] = useState<Things>();
   const [devices, setDevices] = useState<Array<string>>();
   const [url, setUrl] = useState(
-    "https://nqku66ut4d.execute-api.eu-central-1.amazonaws.com/items"
+    "https://l0xyyfy183.execute-api.eu-central-1.amazonaws.com/things"
   );
-  const itemList = ["Item1", "Item2", "Item3", "Item4", "Item5"];
 
   const [loading, setLoading] = useState(false);
   const [loadingDevices, setLoadingDevices] = useState(false);
@@ -26,9 +25,7 @@ function App() {
   async function request() {
     try {
       setLoading(true);
-      console.log("loading");
       setResponse(await invoke("request", { url }));
-      console.log("finished");
     } catch (e) {
       console.log(e);
     }
@@ -37,11 +34,9 @@ function App() {
 
   async function discoverDevices() {
     try {
-      console.log("called discoverDevices");
       setLoadingDevices(true);
       setDevices([]);
       setDevices(await invoke("discover_devices"));
-      console.log("devices: {}", devices);
     } catch (e) {
       console.log(e);
     }
