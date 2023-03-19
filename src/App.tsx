@@ -16,7 +16,7 @@ function App() {
   const [response, setResponse] = useState<Things>();
   const [devices, setDevices] = useState<Array<string>>();
   const [url, setUrl] = useState(
-    "https://l0xyyfy183.execute-api.eu-central-1.amazonaws.com/things"
+    "https://5et5nk2vi2.execute-api.eu-central-1.amazonaws.com/things"
   );
 
   const [loading, setLoading] = useState(false);
