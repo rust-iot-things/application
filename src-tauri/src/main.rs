@@ -71,7 +71,8 @@ async fn request(url: &str) -> Result<Things, String> {
 }
 
 #[tauri::command]
-async fn set_lamp_state(url: &str) -> Result<(), String> {
+async fn put(url: &str) -> Result<(), String> {
+    println!("put: {}", url);
     let client = reqwest::Client::new();
     match client.put(url).send().await {
         Ok(_) => Ok(()),
@@ -84,7 +85,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             discover_devices,
             request,
-            set_lamp_state,
+            put,
             temperatures::request_temperature,
             humidities::request_humidity
         ])

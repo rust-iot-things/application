@@ -9,18 +9,37 @@ import IThingCard from "./IThingCard";
 export default function ColorPicker(props: IThingCard) {
   const [lampState, setLampState] = useState(false);
   const [color, setColor] = useState("#fff");
-  props.url;
+
   async function request(state: boolean) {
     try {
       let url = props.url + "/" + props.thing.id + "/lamp?state=" + state;
-      console.log(`let's invoke ${url} with ${state}`);
-      await invoke("set_lamp_state", { url });
+      await invoke("put", { url });
     } catch (e) {
       console.log(e);
     }
   }
-  function sendColor(color: string) {
-    console.log(`send color: ${color}`);
+
+  async function sendColor(color: string) {
+    try {
+      // https://5et5nk2vi2.execute-api.eu-central-1.amazonaws.com/things/67564007518124132871400922612758296546/rgb?r=40&g=33&b=0
+      let red = Number("0x" + color.substring(1, 3));
+      let green = Number("0x" + color.substring(3, 5));
+      let blue = Number("0x" + color.substring(5, 7));
+      let url =
+        props.url +
+        "/" +
+        props.thing.id +
+        "/rgb?r=" +
+        red +
+        "&g=" +
+        green +
+        "&b=" +
+        blue;
+      console.log(`send color: ${url}`);
+      await invoke("put", { url });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
