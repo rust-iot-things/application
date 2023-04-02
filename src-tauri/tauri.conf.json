@@ -2,7 +2,7 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
+    "devPath": "http://localhost:5173",
     "distDir": "../dist",
     "withGlobalTauri": false
   },
@@ -16,43 +16,20 @@
       "shell": {
         "all": false,
         "open": true
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["https://nqku66ut4d.execute-api.eu-central-1.amazonaws.com/*"]
       }
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "deb": {
-        "depends": []
-      },
-      "externalBin": [],
       "icon": [
         "icons/400x400.png",
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.rust.iot.things",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
+      "iOS": {
+        "developmentTeam": "demo"
       },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
+      "identifier": "com.rust.iot.things",
+      "targets": "all"
     },
     "security": {
       "csp": null
@@ -63,10 +40,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
         "resizable": true,
         "title": "application",
-        "width": 800
+        "width": 800,
+        "height": 600
       }
     ]
   }
