@@ -4,7 +4,7 @@ import Fab from "@mui/material/Fab";
 import { useState, useEffect } from "react";
 import { TungstenOutlined } from "@mui/icons-material";
 import { invoke } from "@tauri-apps/api/tauri";
-import IThingCard from "./IThingCard";
+import IThingCard from "../things/IThingCard";
 
 export default function ColorPicker(props: IThingCard) {
   const [lampState, setLampState] = useState(false);
