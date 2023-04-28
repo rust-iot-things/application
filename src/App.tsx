@@ -3,17 +3,21 @@ import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
 
 import Grid from "@mui/material/Grid";
-import Things from "./Things";
-import ThingCard from "./ThingCard";
+import Things from "./components/things/Things";
+import ThingCard from "./components/things/ThingCard";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import CircularProgress from "@mui/material/CircularProgress";
 import SensorsOutlinedIcon from "@mui/icons-material/SensorsOutlined";
+import INetworkManager from "./components/networkmanager/INetworkManager";
+import ManagerFactory from "./components/ManagerFactory";
 
 function App() {
-  const [response, setResponse] = useState<Things>();
+  const networkManager: INetworkManager = ManagerFactory.getNetworkManager();
+
+  const [things, setThings] = useState<Things>();
   const [devices, setDevices] = useState<Array<string>>();
   const [url, setUrl] = useState(
     "https://5et5nk2vi2.execute-api.eu-central-1.amazonaws.com/things"
@@ -22,15 +26,33 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [loadingDevices, setLoadingDevices] = useState(false);
 
-  async function request() {
-    try {
-      setLoading(true);
-      setResponse(await invoke("request", { url }));
-    } catch (e) {
-      console.log(e);
-    }
-    setLoading(false);
-  }
+  useEffect(() => {
+    getThings();
+  }, []);
+
+  const getThings = () => {
+    setLoading(true);
+
+    networkManager
+      .getThings()
+      .then((response) => {
+        setThings(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const customRequest = () => {
+    console.log("this is the url: ", url);
+    networkManager
+      .useRequestFromURL(url)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => console.log(e));
+  };
 
   async function discoverDevices() {
     try {
@@ -45,13 +67,13 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Rust IoT Things</h1>
+      <h1>{"Rust IoT Things"}</h1>
 
       <div className="row">
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            request();
+            customRequest();
           }}
         >
           <input
@@ -61,7 +83,7 @@ function App() {
             }}
             placeholder="https//..."
           />
-          <button type="submit">Display</button>
+          <button type="submit">{"Submit"}</button>
         </form>
       </div>
       <p></p>
@@ -73,7 +95,7 @@ function App() {
         ) : (
           <Grid container spacing={2}>
             {" "}
-            {response?.Items.map((thing, index) => (
+            {things?.Items.map((thing, index) => (
               <Grid key={index} id={thing.id} item xs={100}>
                 <ThingCard thing={thing} url={url} />
               </Grid>
