@@ -128,8 +128,15 @@ export default function ThingCard(props: IThingCard) {
       <Collapse in={clicked} timeout="auto" unmountOnExit>
         <CardContent>
           <ColorPicker thing={props.thing} url={props.url} />
-          <div style={{ width: "100%", height: 200 }}>
-            <ResponsiveContainer width="100%" height="100%">
+          <div
+            style={{
+              position: "relative",
+              margin: "auto",
+              width: "85vw",
+              height: 200,
+            }}
+          >
+            <ResponsiveContainer>
               <LineChart data={getTemperatureDataToDisplay()}>
                 <CartesianGrid strokeDasharray="2 2" />
                 <XAxis
